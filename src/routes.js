@@ -7,20 +7,27 @@ import { createStackNavigator } from "react-navigation-stack";
 
 import logo from "./assets/logo_i4por.png";
 
-import Feed from "./pages/Feed";
+import SignUp from "./pages/SignUp";
+import SignIn from "./pages/SignIn";
 
 const Routes = createAppContainer(
   createStackNavigator(
     {
-      Feed
+      SignIn,
+      SignUp
     },
     {
+      initialRouteName: "SignUp",
       headerLayoutPreset: "center",
       defaultNavigationOptions: {
         headerTitle: <Image source={logo} />,
+        headerTintColor: "white",
         headerStyle: {
           backgroundColor: "#f5f5f5"
         }
+      },
+      navigationOptions: {
+        tabBarLabel: "Home!"
       }
     }
   )
