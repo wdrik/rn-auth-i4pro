@@ -11,7 +11,9 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import logo from "../../assets/logo_i4pro.png";
 
 export default function SignIn() {
-  const [login, setLogin] = useState('iosilva');
+  const [login, setLogin] = useState('');
+  const [password, setPassword] = useState('');
+  const [signInStep, setSignInStep] = useState(1)
 
   // useEffect(() => {
   //   async function loadConfigLayout() {
@@ -48,23 +50,29 @@ export default function SignIn() {
         autoCorrect={false}
       />
 
-      {/* <Input
-        placeholder="Senha"
-        value={null}
-        onChangeText={() => ({})}
-        autoCapitalize="none"
-        autoCorrect={false}
-        secureTextEntry
-      /> */}
+      {signInStep > 1 && (
+        <Input
+          placeholder="Senha"
+          value={password}
+          onChangeText={setPassword}
+          autoCapitalize="none"
+          autoCorrect={false}
+          secureTextEntry
+        />
+      )}
 
       {/* <ErrorMessage>Ocorreu um erro!</ErrorMessage> */}
 
       <Button onPress={handleGetGuide}>
-        <ButtonText>Continuar &nbsp; <Icon name="long-arrow-alt-right" size={18} /></ButtonText>
+        { signInStep === 1 ? 
+          (<ButtonText>Continuar &nbsp; <Icon name="long-arrow-alt-right" size={18} /></ButtonText>) : 
+          (<ButtonText>Login</ButtonText>) 
+        }
+        
       </Button>
 
       <SignUpLink onPress={() => ({})}>
-        <SignUpLinkText>SignUp</SignUpLinkText>
+        <SignUpLinkText>Create an account.</SignUpLinkText>
       </SignUpLink>
     </Container>
   );
