@@ -25,7 +25,7 @@ export const Input = styled.TextInput`
 
 export const ErrorMessage = styled.Text`
   textAlign: center;
-  color: #ce2029;
+  color: red;
   fontSize: 16px;
   marginBottom: 15px;
   marginHorizontal: 20px;
@@ -34,7 +34,7 @@ export const ErrorMessage = styled.Text`
 export const Button = styled.TouchableHighlight`
   padding: 20px;
   borderRadius: 5px;
-  backgroundColor: #FC6663;
+  backgroundColor: #f15624;
   alignSelf: stretch;
   margin: 15px;
   marginHorizontal: 20px;
