@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-// import { StatusBar } from "react-native";
+import { StatusBar, Text } from "react-native";
 
 import { Container, Logo, Input, Button, ButtonText, SignUpLink, SignUpLinkText, ErrorMessage } from "./styles";
 
@@ -13,7 +13,9 @@ import logo from "../../assets/logo_i4pro.png";
 export default function SignIn() {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
-  const [signInStep, setSignInStep] = useState(1)
+  const [signInStep, setSignInStep] = useState(1);
+  const [guid, setGuid] = useState('');
+  const [error, setError] = useState('');
 
   // useEffect(() => {
   //   async function loadConfigLayout() {
@@ -26,12 +28,49 @@ export default function SignIn() {
   // }, []);
 
 
-  const handleGetGuide = async () => {
-    const response = await api.post('Accounts/login', {
-      userName: login
-    })
+  const handleGetGuid = async () => {
+    if(login === '') {
+      setError('Preencha o login!')
+      
+      return;      
+    } 
 
-    console.log(response);
+    try {
+      const {data, status} = await api.post('Accounts/login', { userName: login })
+      
+      console.log(data, status);
+
+      
+      if(status === 200) {
+        setSignInStep(2);
+        setGuid(data);
+        setError('')
+      } 
+    } catch (err) {
+      console.log(err)
+    } 
+  }
+
+  const handleSignIn = async () => {
+    if(password === '') {
+      setError('Preencha o password!')
+      
+      return;
+    } 
+
+    console.log('password', password)
+    console.log('guid', guid)
+
+    try {
+      const response = await api.post('Accounts/Password', {
+        password: password,
+        guid: guid
+      })
+  
+      console.log(response);
+    } catch(err) {
+      console.log(err)
+    }
   }
 
   return (
@@ -40,15 +79,20 @@ export default function SignIn() {
 
       <Logo source={logo} resizeMode="contain" />
 
-      <Input
-        placeholder="Login"
-        placeholderTextColor="#999"
-        value={login}
-        onChangeText={setLogin}
-        // keyboardType="email-address"
-        autoCapitalize="none"
-        autoCorrect={false}
-      />
+      <Text>password: {password}</Text>
+      <Text>guid: {guid}</Text>
+
+      {signInStep === 1 && (
+        <Input
+          placeholder="Login"
+          placeholderTextColor="#999"
+          value={login}
+          onChangeText={setLogin}
+          // keyboardType="email-address"
+          autoCapitalize="none"
+          autoCorrect={false}
+        />
+      )}
 
       {signInStep > 1 && (
         <Input
@@ -61,9 +105,9 @@ export default function SignIn() {
         />
       )}
 
-      {/* <ErrorMessage>Ocorreu um erro!</ErrorMessage> */}
+      {error !== '' && (<ErrorMessage>{error}</ErrorMessage>)}
 
-      <Button onPress={handleGetGuide}>
+      <Button onPress={signInStep === 1 ? handleGetGuid : handleSignIn}>
         { signInStep === 1 ? 
           (<ButtonText>Continuar &nbsp; <Icon name="long-arrow-alt-right" size={18} /></ButtonText>) : 
           (<ButtonText>Login</ButtonText>) 
