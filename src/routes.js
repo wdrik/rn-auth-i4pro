@@ -5,7 +5,7 @@ import { Image } from "react-native";
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 
-import logo from "./assets/logo_i4por.png";
+import logo from "./assets/logo_i4pro.png";
 
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
@@ -17,10 +17,10 @@ const Routes = createAppContainer(
       SignUp
     },
     {
-      initialRouteName: "SignUp",
+      initialRouteName: "SignIn",
       headerLayoutPreset: "center",
       defaultNavigationOptions: {
-        headerTitle: <Image source={logo} />,
+        headerTitle: <Image source={logo} style={{ width: 50, height: 20 }} />,
         headerTintColor: "white",
         headerStyle: {
           backgroundColor: "#f5f5f5"
