@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://sitedev/i4proportalApi/api/"
+  baseURL: "http://sitedev/inshareApi/api/"
 });
 
 export default api;

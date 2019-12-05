@@ -16,6 +16,7 @@ export default function SignIn() {
   const [signInStep, setSignInStep] = useState(1);
   const [guid, setGuid] = useState('');
   const [error, setError] = useState('');
+  const [token, setToken] = useState('');
 
   // useEffect(() => {
   //   async function loadConfigLayout() {
@@ -38,10 +39,7 @@ export default function SignIn() {
     try {
       const {data, status} = await api.post('Accounts/login', { userName: login })
       
-      console.log(data, status);
-
-      
-      if(status === 200) {
+      if (status === 200) {
         setSignInStep(2);
         setGuid(data);
         setError('')
@@ -52,22 +50,27 @@ export default function SignIn() {
   }
 
   const handleSignIn = async () => {
+    
     if(password === '') {
       setError('Preencha o password!')
       
       return;
     } 
 
-    console.log('password', password)
-    console.log('guid', guid)
-
     try {
-      const response = await api.post('Accounts/Password', {
-        password: password,
-        guid: guid
+      const {data} = await api.post('Accounts/Password', {
+        password,
+        guid
+      },
+      {
+        headers: {
+          ID_PORTAL: 1
+        }
       })
-  
-      console.log(response);
+
+      setToken(data.access_token)
+
+      console.log(data)
     } catch(err) {
       console.log(err)
     }
@@ -79,8 +82,7 @@ export default function SignIn() {
 
       <Logo source={logo} resizeMode="contain" />
 
-      <Text>password: {password}</Text>
-      <Text>guid: {guid}</Text>
+      {token !== '' && (<Text>Token: {token}</Text>)}
 
       {signInStep === 1 && (
         <Input
@@ -112,7 +114,6 @@ export default function SignIn() {
           (<ButtonText>Continuar &nbsp; <Icon name="long-arrow-alt-right" size={18} /></ButtonText>) : 
           (<ButtonText>Login</ButtonText>) 
         }
-        
       </Button>
 
       <SignUpLink onPress={() => ({})}>
