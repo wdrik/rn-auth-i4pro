@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
-import { StatusBar, Text } from "react-native";
+import { StatusBar, Text, AsyncStorage } from "react-native";
 
 import { Container, Logo, Input, Button, ButtonText, SignUpLink, SignUpLinkText, ErrorMessage } from "./styles";
 
@@ -18,17 +18,6 @@ export default function SignIn() {
   const [error, setError] = useState('');
   const [token, setToken] = useState('');
 
-  // useEffect(() => {
-  //   async function loadConfigLayout() {
-  //     const response = await api.get('configLayout');
-
-  //     console.log(response);
-  //   }
-    
-  //   loadConfigLayout();
-  // }, []);
-
-
   const handleGetGuid = async () => {
     if(login === '') {
       setError('Preencha o login!')
@@ -44,8 +33,8 @@ export default function SignIn() {
         setGuid(data);
         setError('')
       } 
-    } catch (err) {
-      console.log(err)
+    } catch (_err) {
+      console.log(_err)
     } 
   }
 
@@ -71,8 +60,15 @@ export default function SignIn() {
       setToken(data.access_token)
 
       console.log(data)
-    } catch(err) {
-      console.log(err)
+
+
+      await AsyncStorage.setItem('@AirBnbApp:token', data.access_token);
+
+      console.log('AsyncStorage', AsyncStorage)
+      console.log('AsyncStorage.getItem', AsyncStorage.getItem('@AirBnbApp:token'))
+
+    } catch(_err) {
+      console.log(_err)
     }
   }
 
@@ -90,7 +86,6 @@ export default function SignIn() {
           placeholderTextColor="#999"
           value={login}
           onChangeText={setLogin}
-          // keyboardType="email-address"
           autoCapitalize="none"
           autoCorrect={false}
         />
@@ -104,6 +99,7 @@ export default function SignIn() {
           autoCapitalize="none"
           autoCorrect={false}
           secureTextEntry
+          keyboardType="numeric"
         />
       )}
 
