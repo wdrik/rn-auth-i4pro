@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { StatusBar, Text, AsyncStorage } from "react-native";
+import { AsyncStorage } from "react-native";
 
 import { Container, Logo, Input, Button, ButtonText, SignUpLink, SignUpLinkText, ErrorMessage } from "./styles";
 
@@ -16,7 +16,6 @@ export default function SignIn() {
   const [signInStep, setSignInStep] = useState(1);
   const [guid, setGuid] = useState('');
   const [error, setError] = useState('');
-  const [token, setToken] = useState('');
 
   const handleGetGuid = async () => {
     if(login === '') {
@@ -26,7 +25,7 @@ export default function SignIn() {
     } 
 
     try {
-      const {data, status} = await api.post('Accounts/login', { userName: login })
+      const { data, status } = await api.post('Accounts/login', { userName: login })
       
       if (status === 200) {
         setSignInStep(2);
@@ -40,7 +39,7 @@ export default function SignIn() {
 
   const handleSignIn = async () => {
     
-    if(password === '') {
+    if (password === '') {
       setError('Preencha o password!')
       
       return;
@@ -57,15 +56,9 @@ export default function SignIn() {
         }
       })
 
-      setToken(data.access_token)
+      await AsyncStorage.setItem('@i4proApp:token', data.access_token);
 
-      console.log(data)
-
-
-      await AsyncStorage.setItem('@AirBnbApp:token', data.access_token);
-
-      console.log('AsyncStorage', AsyncStorage)
-      console.log('AsyncStorage.getItem', AsyncStorage.getItem('@AirBnbApp:token'))
+      // const token = await AsyncStorage.getItem('@i4proApp:token');
 
     } catch(_err) {
       console.log(_err)
@@ -74,11 +67,7 @@ export default function SignIn() {
 
   return (
     <Container>
-      {/* <StatusBar hidden /> */}
-
       <Logo source={logo} resizeMode="contain" />
-
-      {token !== '' && (<Text>Token: {token}</Text>)}
 
       {signInStep === 1 && (
         <Input

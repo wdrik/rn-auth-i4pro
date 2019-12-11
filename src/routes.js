@@ -20,7 +20,7 @@ const Routes = createAppContainer(
       initialRouteName: "SignIn",
       headerLayoutPreset: "center",
       defaultNavigationOptions: {
-        headerTitle: <Image source={logo} style={{ width: 50, height: 20 }} />,
+        headerTitle: <Image source={logo} style={{ width: 55, height: 25 }} />,
         headerTintColor: "white",
         headerStyle: {
           backgroundColor: "#f5f5f5"
