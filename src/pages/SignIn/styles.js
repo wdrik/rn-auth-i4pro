@@ -2,60 +2,59 @@ import styled from "styled-components/native";
 
 export const Container = styled.View`
   flex: 1;
-  alignItems: center;
-  justifyContent: center;
-  backgroundColor: #F5F5F5;
+  alignitems: center;
+  justifycontent: center;
+  backgroundcolor: #f5f5f5;
 `;
 
 export const Logo = styled.Image`
   height: 10%;
-  marginBottom: 40px;
+  marginbottom: 40px;
 `;
 
 export const Input = styled.TextInput`
-  paddingHorizontal: 20px;
-  paddingVertical: 15px;
-  borderRadius: 5px;
-  backgroundColor: #FFF;
-  alignSelf: stretch;
-  marginBottom: 15px;
-  marginHorizontal: 20px;
-  fontSize: 16px;
+  paddinghorizontal: 20px;
+  paddingvertical: 15px;
+  borderradius: 5px;
+  backgroundcolor: #fff;
+  alignself: stretch;
+  marginbottom: 15px;
+  marginhorizontal: 20px;
+  fontsize: 16px;
 `;
 
 export const ErrorMessage = styled.Text`
-  textAlign: center;
+  textalign: center;
   color: red;
-  fontSize: 16px;
-  marginBottom: 15px;
-  marginHorizontal: 20px;
+  fontsize: 16px;
+  marginbottom: 15px;
+  marginhorizontal: 20px;
 `;
 
 export const Button = styled.TouchableHighlight`
   padding: 20px;
-  borderRadius: 5px;
-  backgroundColor: #f15624;
-  alignSelf: stretch;
+  borderradius: 5px;
+  backgroundcolor: #f15624;
+  alignself: stretch;
   margin: 15px;
-  marginHorizontal: 20px;
+  marginhorizontal: 20px;
 `;
 
 export const ButtonText = styled.Text`
-  color: #FFF;
-  fontWeight: bold;
-  fontSize: 16px;
-  textAlign: center;
+  color: #fff;
+  fontweight: bold;
+  fontsize: 16px;
+  textalign: center;
 `;
 
 export const SignUpLink = styled.TouchableHighlight`
   padding: 10px;
-  marginTop: 20px;
+  margintop: 20px;
 `;
 
 export const SignUpLinkText = styled.Text`
   color: #999;
-  fontWeight: bold;
-  fontSize: 16px;
-  textAlign: center;
+  fontweight: bold;
+  fontsize: 16px;
+  textalign: center;
 `;
-
