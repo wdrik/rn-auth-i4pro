@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
-import { Text } from "react-native";
+import { Text } from 'react-native';
 
 export default function SignUp() {
   return <Text>SignUp</Text>;

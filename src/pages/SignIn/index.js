@@ -1,53 +1,40 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import {
-  TouchableWithoutFeedback,
-  Keyboard,
-  AsyncStorage,
-  Text
-} from "react-native";
+import { TouchableWithoutFeedback, Keyboard, AsyncStorage, StatusBar } from 'react-native';
 
-import {
-  Container,
-  Logo,
-  Input,
-  Button,
-  ButtonText,
-  SignUpLink,
-  SignUpLinkText,
-  ErrorMessage
-} from "./styles";
+import { Container, Logo, Input, Button, ButtonText, SignUpLink, SignUpLinkText, ErrorMessage } from './styles';
 
-import api from "../../services/api";
+import { sendUsername, auth } from '../../services/requests';
 
-import Icon from "react-native-vector-icons/FontAwesome5";
+import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
 
-import logo from "../../assets/logo_i4pro.png";
+import Icon from 'react-native-vector-icons/FontAwesome5';
+
+import logo from '../../assets/logo_i4pro.png';
 
 export default function SignIn() {
-  const [login, setLogin] = useState("");
-  const [password, setPassword] = useState("");
+  const [login, setLogin] = useState('');
+  const [password, setPassword] = useState('');
   const [signInStep, setSignInStep] = useState(1);
-  const [guid, setGuid] = useState("");
-  const [error, setError] = useState("");
-  const [token, setToken] = useState("");
+  const [guid, setGuid] = useState('');
+  const [error, setError] = useState('');
+
+  const { navigate } = useNavigation();
 
   const handleGetGuid = async () => {
-    if (login === "") {
-      setError("Preencha o login!");
+    if (login === '') {
+      setError('Preencha o login!');
 
       return;
     }
 
     try {
-      const { data, status } = await api.post("Accounts/login", {
-        userName: login
-      });
+      const { data, status } = await sendUsername((userName = login));
 
       if (status === 200) {
         setSignInStep(2);
         setGuid(data);
-        setError("");
+        setError('');
       }
     } catch (_err) {
       console.log(_err);
@@ -55,35 +42,18 @@ export default function SignIn() {
   };
 
   const handleSignIn = async () => {
-    if (password === "") {
-      setError("Preencha o password!");
+    if (password === '') {
+      setError('Preencha o password!');
 
       return;
     }
 
     try {
-      const { data } = await api.post(
-        "Accounts/Password",
-        {
-          password,
-          guid
-        },
-        {
-          headers: {
-            ID_PORTAL: 7
-          }
-        }
-      );
+      const { data } = await auth(password, guid);
 
-      console.log(data);
+      await AsyncStorage.setItem('@i4proApp:token', data.access_token);
 
-      await AsyncStorage.setItem("@i4proApp:token", data.access_token);
-
-      const token = await AsyncStorage.getItem("@i4proApp:token");
-
-      token && Keyboard.dismiss();
-
-      setToken(token);
+      navigate('Dashboard');
     } catch (_err) {
       console.log(_err);
     }
@@ -91,19 +61,13 @@ export default function SignIn() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      {/* <View> */}
       <Container>
+        {/* <StatusBar hidden/> */}
+
         <Logo source={logo} resizeMode="contain" />
 
         {signInStep === 1 && (
-          <Input
-            placeholder="Login"
-            placeholderTextColor="#999"
-            value={login}
-            onChangeText={setLogin}
-            autoCapitalize="none"
-            autoCorrect={false}
-          />
+          <Input placeholder="Login" placeholderTextColor="#999" value={login} onChangeText={setLogin} autoCapitalize="none" autoCorrect={false} />
         )}
 
         {signInStep > 1 && (
@@ -118,9 +82,7 @@ export default function SignIn() {
           />
         )}
 
-        {error !== "" && <ErrorMessage>{error}</ErrorMessage>}
-
-        <Text>{token !== "" && token}</Text>
+        {error !== '' && <ErrorMessage>{error}</ErrorMessage>}
 
         <Button onPress={signInStep === 1 ? handleGetGuid : handleSignIn}>
           {signInStep === 1 ? (
@@ -132,10 +94,13 @@ export default function SignIn() {
           )}
         </Button>
 
-        <SignUpLink onPress={() => ({})}>
+        <SignUpLink
+          onPress={() => {
+            navigate('SignUp');
+          }}
+        >
           <SignUpLinkText>Create an account.</SignUpLinkText>
         </SignUpLink>
-        {/* </View> */}
       </Container>
     </TouchableWithoutFeedback>
   );
