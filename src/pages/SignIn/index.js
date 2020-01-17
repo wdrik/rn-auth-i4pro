@@ -49,11 +49,17 @@ export default function SignIn() {
     }
 
     try {
-      const { data } = await auth(password, guid);
+      const { data, status } = await auth(password, guid);
 
-      await AsyncStorage.setItem('@i4proApp:token', data.access_token);
+      if (status === 200) {
+        await AsyncStorage.setItem('@i4proApp:token', data.access_token);
 
-      navigate('Dashboard');
+        navigate('Dashboard');
+        setLogin('');
+        setPassword('');
+
+        setSignInStep(1);
+      }
     } catch (_err) {
       console.log(_err);
     }

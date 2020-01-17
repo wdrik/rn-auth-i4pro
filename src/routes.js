@@ -11,6 +11,14 @@ import SignUp from './pages/SignUp';
 import SignIn from './pages/SignIn';
 import Dashboard from './pages/Dashboard';
 
+import { AsyncStorage } from 'react-native';
+
+const getToken = async () => {
+  const token = await AsyncStorage.getItem('@i4proApp:token');
+
+  return token;
+};
+
 const Routes = createAppContainer(
   createStackNavigator(
     {
@@ -19,7 +27,7 @@ const Routes = createAppContainer(
       SignUp
     },
     {
-      initialRouteName: 'Dashboard',
+      initialRouteName: getToken() ? 'SignIn' : 'Dashboard',
       headerLayoutPreset: 'center',
       defaultNavigationOptions: {
         headerTitle: <Image source={logo} style={{ width: 55, height: 25 }} />,

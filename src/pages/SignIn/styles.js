@@ -13,13 +13,13 @@ export const Logo = styled.Image`
 `;
 
 export const Input = styled.TextInput`
-  padding-horizontal: 20px;
-  padding-vertical: 15px;
+  padding: 15px 20px;
   border-radius: 5px;
   background-color: #fff;
   align-self: stretch;
   margin-bottom: 15px;
-  margin-horizontal: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
   font-size: 16px;
 `;
 
@@ -28,7 +28,8 @@ export const ErrorMessage = styled.Text`
   color: red;
   font-size: 16px;
   margin-bottom: 15px;
-  margin-horizontal: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
 `;
 
 export const Button = styled.TouchableHighlight`
@@ -37,7 +38,8 @@ export const Button = styled.TouchableHighlight`
   background-color: #f15624;
   align-self: stretch;
   margin: 15px;
-  margin-horizontal: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
 `;
 
 export const ButtonText = styled.Text`
