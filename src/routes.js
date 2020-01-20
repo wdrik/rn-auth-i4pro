@@ -2,8 +2,7 @@ import React from 'react';
 
 import { Image } from 'react-native';
 
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 
 import logo from './assets/logo_i4pro.png';
 
@@ -20,25 +19,25 @@ const getToken = async () => {
 };
 
 const Routes = createAppContainer(
-  createStackNavigator(
+  createSwitchNavigator(
     {
       Dashboard,
       SignIn,
       SignUp
     },
     {
-      initialRouteName: getToken() ? 'SignIn' : 'Dashboard',
-      headerLayoutPreset: 'center',
-      defaultNavigationOptions: {
-        headerTitle: <Image source={logo} style={{ width: 55, height: 25 }} />,
-        headerTintColor: 'white',
-        headerStyle: {
-          backgroundColor: '#f5f5f5'
-        }
-      },
-      navigationOptions: {
-        tabBarLabel: 'Dashboard!'
-      }
+      initialRouteName: getToken() ? 'SignIn' : 'Dashboard'
+      // headerLayoutPreset: 'center',
+      // defaultNavigationOptions: {
+      //   headerTitle: <Image source={logo} style={{ width: 55, height: 25 }} />,
+      //   headerTintColor: 'white',
+      //   headerStyle: {
+      //     backgroundColor: '#f5f5f5'
+      //   }
+      // },
+      // navigationOptions: {
+      //   tabBarLabel: 'Dashboard!'
+      // }
     }
   )
 );

@@ -1,27 +1,22 @@
 import React, { useState } from 'react';
-
-import { TouchableWithoutFeedback, Keyboard, AsyncStorage, StatusBar } from 'react-native';
-
-import { Container, Logo, Input, Button, ButtonText, SignUpLink, SignUpLinkText, ErrorMessage } from './styles';
-
-import { sendUsername, auth } from '../../services/requests';
-
-import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
+import { TouchableWithoutFeedback, Keyboard, AsyncStorage, Platform } from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import logo from '../../assets/logo_i4pro.png';
 
-export default function SignIn() {
-  const [login, setLogin] = useState('');
-  const [password, setPassword] = useState('');
+import { sendUsername, auth } from '../../services/requests';
+
+import { Container, Logo, Input, Button, ButtonText, SignUpLink, SignUpLinkText, ErrorMessage } from './styles';
+
+export default function SignIn({ navigation }) {
+  const [login, setLogin] = useState('admin');
+  const [password, setPassword] = useState('1234');
   const [signInStep, setSignInStep] = useState(1);
   const [guid, setGuid] = useState('');
   const [error, setError] = useState('');
 
-  const { navigate } = useNavigation();
-
-  const handleGetGuid = async () => {
+  async function handleGetGuid() {
     if (login === '') {
       setError('Preencha o login!');
 
@@ -29,19 +24,17 @@ export default function SignIn() {
     }
 
     try {
-      const { data, status } = await sendUsername((userName = login));
+      const { data } = await sendUsername((userName = login));
 
-      if (status === 200) {
-        setSignInStep(2);
-        setGuid(data);
-        setError('');
-      }
+      setSignInStep(2);
+      setGuid(data);
+      setError('');
     } catch (_err) {
       console.log(_err);
     }
-  };
+  }
 
-  const handleSignIn = async () => {
+  async function handleSignIn() {
     if (password === '') {
       setError('Preencha o password!');
 
@@ -49,27 +42,27 @@ export default function SignIn() {
     }
 
     try {
-      const { data, status } = await auth(password, guid);
+      const { data } = await auth(password, guid);
 
-      if (status === 200) {
-        await AsyncStorage.setItem('@i4proApp:token', data.access_token);
+      await AsyncStorage.setItem('@i4proApp:token', data.access_token);
 
-        navigate('Dashboard');
-        setLogin('');
-        setPassword('');
+      setLogin('');
+      setPassword('');
+      setSignInStep(1);
 
-        setSignInStep(1);
-      }
+      navigation.navigate('Dashboard');
     } catch (_err) {
       console.log(_err);
     }
-  };
+  }
+
+  function handleSignUpNavigate() {
+    navigation.navigate('SignUp');
+  }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <Container>
-        {/* <StatusBar hidden/> */}
-
+      <Container enabled={Platform.OS === 'ios'} behavior="padding">
         <Logo source={logo} resizeMode="contain" />
 
         {signInStep === 1 && (
@@ -100,11 +93,7 @@ export default function SignIn() {
           )}
         </Button>
 
-        <SignUpLink
-          onPress={() => {
-            navigate('SignUp');
-          }}
-        >
+        <SignUpLink onPress={handleSignUpNavigate}>
           <SignUpLinkText>Create an account.</SignUpLinkText>
         </SignUpLink>
       </Container>

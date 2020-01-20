@@ -2,19 +2,15 @@ import React, { useState, useEffect } from 'react';
 
 import { AsyncStorage, Text } from 'react-native';
 
-import { Container, Button, ButtonText, List, ListItem, ListItemTitle, ListItemDescription } from './styles';
-
-import { useNavigation } from 'react-navigation-hooks';
-
 import { getProfile, logoff, getRulesPassword } from '../../services/requests';
 
-export default function Dashboard() {
+import { Container, Button, ButtonText, List, ListItem, ListItemTitle, ListItemDescription } from './styles';
+
+export default function Dashboard({ navigation }) {
   const [userName, setUsername] = useState('');
   const [name, setName] = useState('');
   const [email, setemail] = useState('');
   const [rulesPassword, setRulesPassword] = useState([]);
-
-  const { navigate } = useNavigation();
 
   useEffect(() => {
     handleGetProfile();
@@ -29,6 +25,12 @@ export default function Dashboard() {
     setemail(data.email);
   }
 
+  async function handleGetRulesPassword() {
+    const { data } = await getRulesPassword();
+
+    setRulesPassword(data);
+  }
+
   async function handleLogout() {
     const token = await AsyncStorage.getItem('@i4proApp:token');
 
@@ -37,24 +39,8 @@ export default function Dashboard() {
     if (status === 200) {
       AsyncStorage.clear();
 
-      navigate('SignIn');
+      navigation.navigate('SignIn');
     }
-  }
-
-  async function handleGetRulesPassword() {
-    const { data } = await getRulesPassword();
-
-    setRulesPassword(data);
-  }
-
-  function renderItem({ item }) {
-    return (
-      <ListItem>
-        <ListItemTitle>{item.nameParam}</ListItemTitle>
-        <ListItemDescription>{item.message}</ListItemDescription>
-        <ListItemDescription>{item.valueParam}</ListItemDescription>
-      </ListItem>
-    );
   }
 
   function loadMore() {
@@ -67,7 +53,19 @@ export default function Dashboard() {
       <Text>name: {name}</Text>
       <Text>email: {email}</Text>
 
-      <List data={rulesPassword} keyExtractor={item => item.nameParam} renderItem={renderItem} onEndReached={loadMore} onEndReachedThreshold={0.1} />
+      <List
+        data={rulesPassword}
+        keyExtractor={item => item.nameParam}
+        onEndReached={loadMore}
+        onEndReachedThreshold={0.1}
+        renderItem={({ item }) => (
+          <ListItem>
+            <ListItemTitle>{item.nameParam}</ListItemTitle>
+            <ListItemDescription>{item.message}</ListItemDescription>
+            <ListItemDescription>{item.valueParam}</ListItemDescription>
+          </ListItem>
+        )}
+      />
 
       <Button
         onPress={() => {
